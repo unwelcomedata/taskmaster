@@ -1,158 +1,102 @@
-# taskmaster
+# Taskmaster: who really dominated?
 
-Comparing Taskmaster (UK) contestant performance across series 1–21.
+A cross-series comparison of every contestant on *Taskmaster* (UK), series 1–21 —
+105 contestants in all.
 
-Because series vary in length (6, 5, 8, or 10 episodes), raw point totals are
-**not** comparable across series. The core of this project is normalizing each
-contestant's total into their **share of that series' points**, making an
-apples-to-apples comparison possible, then ranking every contestant on that
-common scale.
+The catch: series aren't the same length (6, 5, 8, or 10 episodes), so raw point
+totals **can't** be compared directly — a contestant in a 10-episode series has far
+more points on the table than the winner of a 5-episode series. So instead of raw
+points, every contestant is scored by their **share of their own series' points**,
+which puts all 21 series on one common scale.
+
+**The finding:** four contestants posted top-20 all-time runs and *still didn't win
+their series* — they just happened to land in a stacked cast. Sarah Millican's
+runner-up run in Series 14 out-scored 11 of the 21 actual series champions.
+
+---
+
+## The charts
+
+**The 20 most dominant runs** — teal = won their series, red = didn't. Four red bars
+crack the all-time top 20.
+
+![The 20 most dominant Taskmaster runs](docs/top20_performances.png)
+
+**Runaways and nail-biters** — every winner's margin over the runner-up. John Robins
+(S17) ran away with it; three series came down to a single point.
+
+![Taskmaster winner margins](docs/winner_margins.png)
+
+---
+
+## How it was measured
+
+The key metric is **share of series points relative to an even split**
+(`share_vs_equal` in the data):
+
+- Each contestant's points ÷ their series' total points = their share of that series.
+- Divided by an even five-way split, so **1.0 = an exactly average contestant that
+  series**, above 1.0 = above average, below = below.
+
+This normalizes for the differing series lengths that make raw totals misleading.
+
+**Honest limit:** share-of-series still isn't perfectly equal across series — task
+counts and points-per-task vary a bit from series to series. It's far closer to
+apples-to-apples than raw totals, but *Taskmaster* points are a subjective, comedic
+score awarded on-air, not an objective performance measure. Treat this as "who
+dominated their own series," not a definitive skill ranking.
+
+---
+
+## The data
+
+The full dataset is in [`export/`](export/):
+
+- `taskmaster_contestant_metrics_v1.csv` / `.xlsx` / `.parquet` — 105 contestants ×
+  12 columns (raw totals, series share, normalized score, within-series rank, winner
+  flag, margin to winner).
+- `taskmaster_contestant_metrics_v1_codebook.md` — plain-English description of every
+  column.
+
+*(If the `export/` files aren't present in your copy, they regenerate from the
+pipeline — see the source notes below.)*
+
+---
+
+## Sources & license
+
+Full attribution is in [SOURCES.md](SOURCES.md). In short:
+
+- **Points:** hand-collected from the *Taskmaster* UK on-air scoreboards (series
+  finales), cross-checked against the Taskmaster Fandom per-episode statistics and
+  Digital Spy. Scores are facts and aren't copyrightable; the compiled dataset is
+  released by the author.
+- **Names:** contestant full names verified against the show's broadcast credits.
+
+Two documented data decisions: an OCR digit misread was corrected (S10 Katherine
+Parkinson, 148 → 118), and the Series 20 three-way tie — which Maisie Adam won on a
+live tie-break — is recorded so Adam is the sole winner. Both are explained in
+SOURCES.md.
+
+License: dataset released as facts (not copyrightable); see SOURCES.md for details.
+
+---
+
+## A few things that stood out
+
+- **John Robins (S17)** is the most dominant run in the show's history (1.21× an
+  average contestant), and also the biggest runaway win — 21 points clear of the
+  runner-up.
+- **Series 20** was the tightest finish ever: a genuine three-way tie at 151 points,
+  settled by a live tie-breaker.
+- Four beloved runners-up — **Sarah Millican (S14), Daisy May Cooper (S10), Joanne
+  McNally (S17), Jon Richardson (S2)** — had top-20 all-time runs without winning.
+
+---
 
 > **AI-Assisted Development**
-> This project was built with the assistance of [Kiro](https://kiro.dev),
-> an AI-powered development environment. All data sourcing decisions,
-> methodology choices, and published findings are the responsibility of the
-> author. AI was used for code generation, data pipeline construction, and
-> research assistance — not for analysis conclusions or editorial judgment.
-
----
-
-## Data Sources
-
-All data sources are documented in [SOURCES.md](SOURCES.md) with full
-attribution, URLs, licenses, and retrieval notes.
-
-Source provenance is also recorded inside the project database:
-
-```sql
--- Open data/project.duckdb and run:
-SELECT * FROM _sources;
-```
-
----
-
-## Project Structure
-
-```
-taskmaster/
-├── config.yaml              ← sources, paths, export settings — edit this first
-├── SOURCES.md               ← full data source attribution
-├── requirements.txt
-├── data/
-│   ├── raw/                 ← original downloaded files, never modified
-│   ├── interim/             ← cleaned Parquet files (1:1 match DuckDB table names)
-│   ├── processed/           ← analysis-ready Parquet files
-│   └── project.duckdb       ← single-file database for the project
-├── export/                  ← packaged datasets (CSV, Excel, Parquet + codebook)
-├── outputs/                 ← exploratory chart PNGs (from 04-viz)
-│   └── social/             ← publication-ready charts for posting (from 04b-viz-social)
-├── scripts/
-│   ├── README.md            ← pipeline run order and conventions
-│   ├── ingest_all.py        ← reproducible ingestion
-│   ├── clean_all.py         ← standardize raw tables
-│   └── prepare_export.py    ← build final export
-├── notebooks/
-│   ├── 00-explore.ipynb     ← DuckDB query sandbox
-│   ├── 01-ingest.ipynb      ← fetch sources → data/raw/ → DuckDB
-│   ├── 02-clean.ipynb       ← clean + quality checks → data/interim/
-│   ├── 03-prepare.ipynb     ← feature engineering + export packaging
-│   ├── 04-viz.ipynb         ← exploratory charts → outputs/
-│   ├── 04b-viz-social.ipynb ← publication social charts → outputs/social/
-│   └── 05-analysis.ipynb    ← statistical analysis + findings
-└── src/
-    ├── ingest.py            ← fetch helpers (caching, rate limiting)
-    ├── clean_quality.py     ← DuckDB cleaning + quality reports + _sources
-    ├── prepare.py           ← PII stripping, codebook, packaging
-    ├── viz.py               ← matplotlib chart builders (exploratory)
-    └── viz_social.py        ← Altair + vl-convert social export
-```
-
----
-
-## Workflow
-
-### 1. Configure `config.yaml`
-
-Add each data source under the `sources:` block before ingesting:
-
-```yaml
-sources:
-  my_source:
-    url: https://example.gov/data/table
-    type: html_table      # html_table | html_scrape | csv | json
-    table_index: 0
-    js_render: false
-```
-
-### 2. Document sources in `SOURCES.md`
-
-Before ingesting any data, add an entry to `SOURCES.md` for each source:
-- Full URL
-- Publisher / agency
-- License
-- Fields used
-- Any caveats
-
-### 3. Ingest (`01-ingest.ipynb`)
-
-```python
-from src.ingest import load_config, ingest_source
-cfg = load_config("config.yaml")
-df = ingest_source("my_source", cfg)
-```
-
-Raw files land in `data/raw/` untouched. All tables load into DuckDB at
-`data/project.duckdb` with source metadata written to `_sources`.
-
-### 4. Clean (`02-clean.ipynb`)
-
-```python
-from src.clean_quality import get_connection, clean_table, quality_report, save_interim
-con = get_connection(cfg)
-df_clean = clean_table(df, "my_source_raw", con, cast_map={"year": "INTEGER"})
-quality_report(df_clean, "my_source_clean", con)
-save_interim(df_clean, cfg, "my_source_clean.parquet")
-```
-
-### 5. Prepare & export (`03-prepare.ipynb`)
-
-```python
-from src.prepare import package_dataset
-package_dataset(df, cfg, name="my_dataset_v1",
-                codebook={"col": "description"},
-                notes="Source: Agency. License: Public domain.")
-```
-
-### 6. Visualize (`04-viz.ipynb` + `04b-viz-social.ipynb`)
-
-**04-viz** is for exploratory charting (matplotlib). Output goes to `outputs/`.
-
-```python
-from src.viz import ranked_bar_chart, save_chart
-fig = ranked_bar_chart(df, x="state", y="rate", title="Top 10 States", top_n=10,
-                       preset="instagram_portrait")
-save_chart(fig, cfg, "top10_states", preset="instagram_portrait",
-           add_watermark="@unwelcomedata")
-```
-
-**04b-viz-social** is for publication-ready charts (Altair + vl-convert).
-Output goes to `outputs/social/`. Only curated, validated charts go here.
-
-```python
-from src.viz_social import save_social
-save_social(chart, cfg, 'my_social_chart', preset='twitter_landscape')
-```
-
-### 7. Analyze (`05-analysis.ipynb`)
-
-Statistical analysis, regression, group comparisons. Always read from the
-**export** parquet (not raw DuckDB tables) to ensure consistency with
-published data.
-
----
-
-## Anonymity
-
-Commits are authored as `unwelcomedata` to keep the author's real identity
-off the public commit history. Data files, exports, outputs, and `.env`
-secrets are excluded from version control via `.gitignore`.
+> This project was built with the assistance of [Kiro](https://kiro.dev), an
+> AI-powered development environment. All data-sourcing decisions, methodology
+> choices, and published findings are the responsibility of the author. AI was used
+> for code generation, data-pipeline construction, and research assistance — not for
+> analysis conclusions or editorial judgment.
