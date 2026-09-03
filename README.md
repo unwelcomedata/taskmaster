@@ -27,6 +27,16 @@ crack the all-time top 20.
 
 ![Taskmaster winner margins](docs/winner_margins.png)
 
+**Every series, split by share** — each series' points divided among its five
+contestants, so you can see how lopsided or even each cast was.
+
+![Taskmaster series points share](docs/series_points_share.png)
+
+**All 105 contestants, ranked** — the full field by share of series points, with the
+1.0 line marking an average contestant. Winners in teal, non-winners in red.
+
+![All Taskmaster contestants ranked](docs/all_contestants_ranked.png)
+
 ---
 
 ## How it was measured
