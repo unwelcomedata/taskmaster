@@ -52,9 +52,8 @@ dominated their own series," not a definitive skill ranking.
 
 The full dataset is in [`export/`](export/):
 
-- `taskmaster_contestant_metrics_v1.csv` / `.xlsx` / `.parquet` — 105 contestants ×
-  12 columns (raw totals, series share, normalized score, within-series rank, winner
-  flag, margin to winner).
+- `taskmaster_contestant_metrics_v1.csv` — 105 contestants × 12 columns (raw totals,
+  series share, normalized score, within-series rank, winner flag, margin to winner).
 - `taskmaster_contestant_metrics_v1_codebook.md` — plain-English description of every
   column.
 
