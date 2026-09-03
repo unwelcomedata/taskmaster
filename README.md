@@ -3,9 +3,9 @@
 A cross-series comparison of every contestant on *Taskmaster* (UK), series 1–21 —
 105 contestants in all.
 
-The catch: series aren't the same length (6, 5, 8, or 10 episodes), so raw point
+The problem: series aren't the same length (6, 5, 8, or 10 episodes), so raw point
 totals **can't** be compared directly — a contestant in a 10-episode series has far
-more points on the table than the winner of a 5-episode series. So instead of raw
+more points awarded than the winner of a 5-episode series. So instead of raw
 points, every contestant is scored by their **share of their own series' points**,
 which puts all 21 series on one common scale.
 
