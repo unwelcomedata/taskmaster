@@ -1,3 +1,5 @@
+**[@unwelcomedata](https://unwelcomedata.github.io/taskmaster/)** · data from public sources
+
 # Taskmaster: who really dominated?
 
 A cross-series comparison of every contestant on *Taskmaster* (UK), series 1–21 —
