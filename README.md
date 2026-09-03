@@ -58,9 +58,6 @@ The full dataset is in [`export/`](export/):
 - `taskmaster_contestant_metrics_v1_codebook.md` — plain-English description of every
   column.
 
-*(If the `export/` files aren't present in your copy, they regenerate from the
-pipeline — see the source notes below.)*
-
 ---
 
 ## Sources & license
